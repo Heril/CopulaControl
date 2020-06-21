@@ -8,8 +8,7 @@ To run, open R from this directory and enter the command `source('./run.R', loca
 
 ### run.R
 	- wrapper to run entire script.
-	- 
-	- Last line, which is commented out creates an RDS file to save data for later analysis. When done with defaults, this will be about 3.2GB.
+	- Last line, creates an RDS file to save data for later analysis. When done with defaults, this will be about 3.2GB. Comment out to not create this file.
 
 ### dependencies.R
 	- checks if all required packages are installed and installs those missing via CRAN
