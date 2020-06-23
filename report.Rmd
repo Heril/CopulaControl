@@ -1,0 +1,43 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+```{r include=FALSE, cache=TRUE}
+source("./analysis.R")
+```
+
+```{r}
+library(shiny)
+```
+
+```{r rows.print=36, pages.print=4}
+printTibble <- ARL %>% ungroup() %>%
+	mutate(t2 = paste(format(t2ARLmean, digits = 7), "±", format(as.numeric(format(t2ARLmean - t2ARLlwr, digits = 4)), scientific = FALSE)),
+	       mewma = paste(format(meARLmean, digits = 7), "±", format(as.numeric(format(meARLmean - meARLlwr, digits = 4)), scientific = FALSE)),
+	       mcusum = paste(format(mcARLmean, digits = 7), "±", format(as.numeric(format(mcARLmean - mcARLlwr, digits = 4)), scientific = FALSE))) %>%
+	select(rho, copula, shift, t2, mewma, mcusum)
+	print(printTibble)
+	print(printTibble %>% arrange(rho))
+for(i in rhoList) {
+	tmptibble <- ARL %>%
+		filter(rho == i)
+	t2plot <- tmptibble %>%
+	  ggplot(aes(x = copula, y = t2ARLmean, fill = shift)) +
+      geom_bar(position = "dodge", stat = "identity") +
+      geom_errorbar(aes(ymin = t2ARLlwr, ymax = t2ARLupr), width = .2, position = position_dodge(.9)) +
+      ggtitle(paste("Hotelling T-squared, Correlation", i))
+	meplot <- tmptibble %>%
+	  ggplot(aes(x = copula, y = meARLmean, fill = shift)) +
+      geom_bar(position = "dodge", stat = "identity") +
+      geom_errorbar(aes(ymin = meARLlwr, ymax = meARLupr), width = .2, position = position_dodge(.9)) +
+      ggtitle(paste("MEWMA, Correlation", i))
+	mcplot <- tmptibble %>%
+	  ggplot(aes(x = copula, y = mcARLmean, fill = shift)) +
+      geom_bar(position = "dodge", stat = "identity") +
+      geom_errorbar(aes(ymin = mcARLlwr, ymax = mcARLupr), width = .2, position = position_dodge(.9)) +
+      ggtitle(paste("MCUSUM, Correlation", i))
+	print(t2plot)
+	print(meplot)
+	print(mcplot)
+}
+```

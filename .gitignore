@@ -41,9 +41,14 @@ vignettes/*.pdf
 # pkgdown site
 docs/
 
-# R Data Object files
-*.rds
+# Simulated Data
+Data/
 
 # Saved Plots
-*.png
-*.pdf
+Plots/
+
+# Project references
+References/
+
+# Pre-git files
+oldcode/
