@@ -1,13 +1,19 @@
 ---
 title: "R Notebook"
-output: html_notebook
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
 ---
 ```{r include=FALSE, cache=TRUE}
-source("./analysis.R")
+#source('./library.R')
+source("./parameters.R")
+ARL <- readRDS("Data/newarl.rds")
+#options(tibble.print_max = 50)
 ```
 
-```{r}
-library(shiny)
+```{r include=FALSE}
+#library(shiny)
 ```
 
 ```{r rows.print=36, pages.print=4}
@@ -16,8 +22,11 @@ printTibble <- ARL %>% ungroup() %>%
 	       mewma = paste(format(meARLmean, digits = 7), "±", format(as.numeric(format(meARLmean - meARLlwr, digits = 4)), scientific = FALSE)),
 	       mcusum = paste(format(mcARLmean, digits = 7), "±", format(as.numeric(format(mcARLmean - mcARLlwr, digits = 4)), scientific = FALSE))) %>%
 	select(rho, copula, shift, t2, mewma, mcusum)
-	print(printTibble)
-	print(printTibble %>% arrange(rho))
+	print(printTibble, n = 144)
+	#print(printTibble %>% arrange(rho))
+```
+
+```{r}
 for(i in rhoList) {
 	tmptibble <- ARL %>%
 		filter(rho == i)

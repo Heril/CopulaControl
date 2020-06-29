@@ -1,6 +1,6 @@
-source('./library.R')
+source('./parameters.R')
 options(dplyr.summarise.inform=F, width = 110)
-if(!exists("simData")) {simData <- readRDS("simData.rds")}
+if(!exists("simData")) {simData <- readRDS("Data/simData.rds")}
 
 rhoList <- levels(simData$rho)
 shiftList <- levels(simData$shift)
@@ -45,10 +45,12 @@ for(i in 1:Ncopula) {
   for(j in 1:Nrho) {
     tmpData[[index]] <- splitData[[index]] %>%
       group_by(copula, rho, shift, iteration) %>%
-      # group_by(copula, rho, iteration) %>%
-      summarise(t2ARL = size/sum(t2 > t2ucl[i,j]),
-                meARL = size/sum(mewma > mewmaucl[i,j]),
-                mcARL = size/sum(mcusum > mcusumucl[i,j])) %>%
+      summarise(t2ARL = ifelse(shift == "0/0", size/sum(t2 > t2ucl[i,j]),
+                              detect_index(t2, function(z)(z>t2ucl[i,j]))),
+                meARL = ifelse(shift == "0/0", size/sum(mewma > mewmaucl[i,j]),
+                              detect_index(mewma, function(z)(z>mewmaucl[i,j]))),
+                mcARL = ifelse(shift == "0/0", size/sum(mcusum > mcusumucl[i,j]),
+                              detect_index(mcusum, function(z)(z>mcusumucl[i,j])))) %>%
       mutate(t2ARL = ifelse(is.infinite(t2ARL), size, t2ARL),
              meARL = ifelse(is.infinite(meARL), size, meARL),
              mcARL = ifelse(is.infinite(mcARL), size, mcARL))
@@ -60,7 +62,6 @@ gc()
 
 ARL <- bind_rows(tmpData) %>%
   group_by(copula, rho, shift) %>%
-  # group_by(copula, rho) %>%
   summarise(t2ci = list(mean_cl_normal(t2ARL) %>%
                           rename(t2ARLmean=y, t2ARLlwr=ymin, t2ARLupr=ymax)),
             meci = list(mean_cl_normal(meARL) %>%

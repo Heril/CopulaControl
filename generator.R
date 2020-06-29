@@ -1,6 +1,6 @@
-source('./library.R')
 source('./parameters.R')
 options(warn=-1)
+
 simData <- vector("list", Nrho)
 for(i in 1:Nrho) {
   myMvd <- list(mvdGen(normalCopula, rho = rhoList[i]),

@@ -11,8 +11,8 @@ library(shiny)
 library(tidyverse)
 library(DT)
 
-ARL <- readRDS("/run/media/spencerrh/DataStore/Nextcloud/Project/ARL.rds")
-tdata <- readRDS("/run/media/spencerrh/DataStore/Nextcloud/Project/fixedData.rds")
+ARL <- readRDS("/Data/ARL.rds")
+tdata <- readRDS("/Data/simData.rds")
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(

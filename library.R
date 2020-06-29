@@ -1,11 +1,11 @@
+source('./dependencies.R')
+
 library(copula)
 library(tidyverse)
 library(Hmisc)
 library(foreach)
 library(doMC)
 library(doRNG)
-
-# seed <- registerDoRNG(20200218)
 
 copulaMvdGen <- function(myCopula, shift = c(0,0)) {
   return(mvdc(copula = myCopula, margins = c("norm", "norm"), paramMargins = list(list(mean = shift[1], sd = 1), list(mean = shift[2], sd = 1))))

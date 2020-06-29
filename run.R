@@ -1,15 +1,15 @@
-source('./dependencies.R', local = T)
-source('./library.R', local = T)
-source('./parameters.R', local = T)
-
 genStartTime <- Sys.time()
-source('./generator.R', local = T)
+source('./generator.R')
 genEndTime <- Sys.time()
+
 analysisStartTime <- Sys.time()
-source('./analysis.R', local = T)
+source('./analysis.R')
 analysisEndTime <- Sys.time()
+
 cat("Generator ")
 print(genEndTime - genStartTime)
 cat("Analysis ")
 print(analysisEndTime - analysisStartTime)
-saveRDS(simData, "simData.rds")
+
+saveRDS(simData, "Data/simData.rds")
+saveRDS(ARL, "Data/ARL.rds")
